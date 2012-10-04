@@ -10,7 +10,7 @@ def read(filename):
     if os.path.exists(f):
         return open(f).read()
 
-setup(name='awsite',
+setup(name='ypcspy',
     version = get_git_version(),
 #    version='1.0a',
     description='Tools to publish sites via Amazon Web Services, easily',
