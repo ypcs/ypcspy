@@ -20,7 +20,7 @@ setup(name='awsite',
     url='https://github.com/ypcs/ypcspy',
     packages=['ypcspy'],
 #    packages=find_packages(),
-    package_dir={'pycspy': 'src/ypcspy',},
+    package_dir={'ypcspy': 'src/ypcspy',},
     install_requires=[
     ],
     license='GPLv3',
