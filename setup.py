@@ -13,7 +13,7 @@ def read(filename):
 setup(name='ypcspy',
     version = get_git_version(),
 #    version='1.0a',
-    description='Tools to publish sites via Amazon Web Services, easily',
+    description='Misc python tools',
     long_description=read('README.txt'),
     author='Ville Korhonen',
     author_email='ville@xd.fi',
