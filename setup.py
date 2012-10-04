@@ -22,6 +22,9 @@ setup(name='ypcspy',
 #    packages=find_packages(),
     package_dir={'ypcspy': 'src/ypcspy',},
     install_requires=[
+        'requests',
+        'requests_cache',
+        'lxml',
     ],
     license='GPLv3',
     classifiers=[
