@@ -11,6 +11,7 @@ import json
 
 from lxml import html
 
+CACHE_DEFAULT_NAME = "ypcspy"
 CACHE_DEFAULT_TIMEOUT = 600 # 600 seconds, ie. 10 minutes
 HTTP_DEFAULT_METHOD = 'GET'
 
@@ -33,7 +34,7 @@ class ScraperFetchError(Exception):
 
 class Scraper(object):
     """Base class for building advanced web scraping apps"""
-    def __init__(self, name=None, *args, **kwargs):
+    def __init__(self, name=CACHE_DEFAULT_NAME, *args, **kwargs):
         self._name = name
         self._stats = {
             'fetched': 0,
