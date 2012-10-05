@@ -6,17 +6,7 @@
 
 import sys
 from lxml import html
-from ypcspy.scraper import Scraper, ScraperMissingElementError
-
-def html_title_parser(content, *args, **kwargs):
-    """Parse page title from HTML source"""
-    doc = html.fromstring(content)
-    title = doc.xpath('/html/head/title/text()')
-    if len(title) == 0:
-        raise ScraperMissingElementError, 'Document doesnt have html/head/title'
-    else:
-        return title[0]
-    return title
+from ypcspy.scraper import Scraper, ScraperMissingElementError, html_title_parser
 
 def main(args):
     """CLI"""
