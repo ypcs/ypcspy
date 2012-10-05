@@ -104,6 +104,21 @@ class Scraper(object):
                 return parsed
 
     def _limit_parse_result(self, parsed, *args, **kwargs):
+        """Limit amount of results
+        >>> from ypcspy.scraper.scraper import Scraper
+        >>> s = Scraper()
+        >>> parsed = ['a','b','c','d','e']
+        >>> s._limit_parse_result(parsed)
+        ['a', 'b', 'c', 'd', 'e']
+        >>> s._limit_parse_result(parsed, limit=0)
+        ['a', 'b', 'c', 'd', 'e']
+        >>> s._limit_parse_result(parsed, limit=1)
+        ['a']
+        >>> s._limit_parse_result(parsed, limit=10)
+        ['a', 'b', 'c', 'd', 'e']
+        >>> s._limit_parse_result(parsed, limit=5)
+        ['a', 'b', 'c', 'd', 'e']
+        """
         if 'limit' in kwargs and kwargs['limit'] > 0 and len(parsed) > 1:
             parsed = parsed[0:int(kwargs['limit'])]
         return parsed
