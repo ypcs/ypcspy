@@ -47,8 +47,48 @@ class AwesomeScraper(Scraper):
                 matches.append(d)
         return matches
 
-    def _get_content(self, doc, c):
-        print c
+    def _get_slice_xpath(self, slice, doc):
+        if isinstance(slice, dict) and slice.has_key('xpath'):
+            return doc.xpath(slice['xpath'])
+        else:
+            return None
+
+    def _parse_slices(self, slice, doc, recursion=0):
+        print type(doc)
+        print slice
+        print recursion
+        recursion += 1
+        if isinstance(doc, list):
+            for d in doc:
+                if slice.has_key('slice'):
+                    results = []
+
+                    for s in slice['slice']:
+                        result = self._parse_slices(s, self._get_slice_xpath(s, d), recursion)
+                        results.append(result)
+                    return results
+                else:
+                    return self._get_slice_xpath(slice, d)
+        else:
+            if slice.has_key('slice'):
+                results = []
+                for s in slice['slice']:
+                    result = self._parse_slices(s, self._get_slice_xpath(s, doc), recursion)
+                    results.append(result)
+                return results
+            else:
+                return self._get_slice_xpath(slice, doc)
+                                    
+        
+        # 1. kerta: doc = lxml.html.HtmlElement, slice = 
+
+    def _get_collections(self, definition):
+        # TODO: sisältääkö definition collectioneja?
+        results = []
+        if definition.has_key('collections'):
+            for c in definition['collections']:
+                results.append(c)
+        return  results      
 
     def parse(self, url):
         defs = self._get_matching_definitions(url)
@@ -60,22 +100,21 @@ class AwesomeScraper(Scraper):
 
         # TODO: Support othet methods in addition to default (GET)
         doc = html.fromstring(self._fetch(url))
-
         results = []
-
+        collections = []
+    
         for d in defs:
-            slices = d['slices']
-            t_result = []
+            collections += self._get_collections(d)
+        
+        for c in collections:
+            collection = {
+                'name': c['name'],
+                'slices': self._parse_slices(slice=c, doc=doc),            
+            }
+            results.append(collection)
 
-            for s in slices:
-                print s['description']
-                result = self._get_content(doc, s['content'])
-                t_result.append(result)
-            results.append(t_result)
+        return self._format_parse_result(results)
 
-        # TODO: format results
-        return results
-
-a = AwesomeScraper()
-a.parse('http://koas.fi/keskustelu')
+a = AwesomeScraper(cache_time=3600)
+print a.parse('http://koas.fi/keskustelu')
 #a.parse('http://www.google.fi')
