@@ -33,7 +33,12 @@ class ScraperFetchError(Exception):
     pass
 
 class Scraper(object):
-    """Base class for building advanced web scraping apps"""
+    """Base class for building advanced web scraping apps
+
+    >>> s = Scraper()
+    >>> s.parse(url='http://www.google.com/', parser=html_title_parser)
+    'Google'
+    """
     def __init__(self, name=CACHE_DEFAULT_NAME, *args, **kwargs):
         self._name = name
         self._stats = {
