@@ -117,7 +117,18 @@ class Scraper(object):
         return self._format_parse_result(parsed, callback=callback, format=format)
 
 def html_title_parser(content, *args, **kwargs):
-    """Parse page title from HTML source"""
+    """Parse page title from HTML source
+
+    >>> from ypcspy.scraper.scraper import html_title_parser
+    >>> html_title_parser('<html><head><title>Test</title></head></html>')
+    'Test'
+    >>> html_title_parser('<head><title>Test</title></head>')
+    'Test'
+    >>> html_title_parser('<title>Test</title>')
+    'Test'
+    >>> html_title_parser('<head><title>Test</title><title>Test2</title></head>')
+    'Test'
+    """
     doc = html.fromstring(content)
     title = doc.xpath('/html/head/title/text()')
     if len(title) == 0:
