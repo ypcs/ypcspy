@@ -89,21 +89,27 @@ class Scraper(object):
         """Fetch given URL using HTTP POST"""
         return self._fetch(url, method='post', *args, **kwargs)
 
-    def parse(self, url, parser, callback=None, format=None,
-        method=HTTP_DEFAULT_METHOD, *args, **kwargs):
-        """Parse given URL using parser and return results"""
-        response = self._fetch(url, method=method)
-        parsed = parser(response, *args, **kwargs)
-
-        if 'limit' in kwargs and kwargs['limit'] > 0 and len(parsed) > 1:
-            parsed = parsed[0:int(kwargs['limit'])]
-
+    def _format_parse_result(self, parsed, callback=None, format=None):
         if callback:
             callback(parsed)
         else:
             if format == 'json':
                 return json.dumps(parsed, default=json_handler)
-            return parsed
+            else:
+                return parsed
+
+    def _limit_parse_result(self, parsed, *args, **kwargs):
+        if 'limit' in kwargs and kwargs['limit'] > 0 and len(parsed) > 1:
+            parsed = parsed[0:int(kwargs['limit'])]
+        return parsed
+
+    def parse(self, url, parser, callback=None, format=None,
+        method=HTTP_DEFAULT_METHOD, *args, **kwargs):
+        """Parse given URL using parser and return results"""
+        response = self._fetch(url, method=method)
+        parsed = self._limit_parse_result(parser(response, *args, **kwargs), *args, **kwargs)
+
+        return self._format_parse_result(parsed, callback=callback, format=format)
 
 def html_title_parser(content, *args, **kwargs):
     """Parse page title from HTML source"""
